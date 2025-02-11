@@ -7,21 +7,19 @@ const Globe = () => {
   const globeRef = useRef();
   const texture = useLoader(THREE.TextureLoader, "/earth.jpg");
   const [scale, setScale] = useState(1);
-  const [isHovered, setIsHovered] = useState(false); // Следим, наведен ли курсор
-  const [marker, setMarker] = useState(null); // Храним координаты точки
+  const [marker, setMarker] = useState(null);
   const isDragging = useRef(false);
 
   const handlePointerDown = () => {
-    isDragging.current = false; // При нажатии сбрасываем флаг
+    isDragging.current = false;
   };
 
   const handlePointerMove = () => {
-    isDragging.current = true; // Если двигаем мышь, считаем, что это не клик
+    isDragging.current = true;
   };
 
   const handlePointerUp = (event) => {
-    if (isDragging.current) return; // Если был drag, не определяем координаты
-
+    if (isDragging.current) return;
     const globe = globeRef.current;
     if (!globe) return;
 
@@ -40,10 +38,8 @@ const Globe = () => {
 
   useEffect(() => {
     const handleScroll = (event) => {
-      if (!isHovered) return; // Если курсор не над глобусом, игнорируем скролл
-
       let newScale = scale - event.deltaY * 0.005;
-      newScale = Math.min(4, Math.max(1, newScale));
+      newScale = Math.min(1.5, Math.max(0.5, newScale));
 
       setScale(newScale);
       console.log(newScale)
@@ -52,7 +48,7 @@ const Globe = () => {
 
     window.addEventListener("wheel", handleScroll);
     return () => window.removeEventListener("wheel", handleScroll);
-  }, [scale, isHovered]);
+  }, [scale]);
 
   return (
     <mesh
@@ -60,10 +56,8 @@ const Globe = () => {
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
-      onPointerEnter={() => setIsHovered(true)} // Навели курсор → включаем зум
-      onPointerLeave={() => setIsHovered(false)} // Увели курсор → выключаем зум
     >
-      <sphereGeometry args={[1, 64, 64]} />
+      <sphereGeometry args={[2.5, 64, 64]} />
       <meshStandardMaterial map={texture} />
     </mesh>
   );
