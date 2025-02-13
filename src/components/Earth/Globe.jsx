@@ -26,16 +26,18 @@ const Globe = () => {
     const intersect = event.intersections[0];
     if (!intersect) return;
   
-    const point = intersect.point.clone().normalize().multiplyScalar(2.5*scale);
-    const lat = Math.asin(point.y / 2.5*scale) * (180 / Math.PI);
+    const point = intersect.point.clone().normalize().multiplyScalar(2.5);
+    const lat = Math.asin(point.y / 2.5) * (180 / Math.PI);
     const lon = Math.atan2(point.z, point.x) * (180 / Math.PI) * (-1);
   
-    setMarker({ position: [point.x, point.y, point.z], lat, lon });
-    console.log("Latitude:", lat, "Longitude:", lon);
+    setMarker({
+      position: point.clone().multiplyScalar(scale).toArray(),
+      lat,
+      lon,
+      originalPosition: point.clone()
+    });
+    console.log(lat, lon);
   };
-  
-
-
 
   useEffect(() => {
     const handleScroll = (event) => {
@@ -43,13 +45,40 @@ const Globe = () => {
       newScale = Math.min(1.5, Math.max(0.5, newScale));
 
       setScale(newScale);
-      console.log(newScale)
-      gsap.to(globeRef.current.scale, { x: newScale, y: newScale, z: newScale, duration: 0.5 });
+
+      if(marker){
+        const newPosition = marker.originalPosition.clone().multiplyScalar(newScale);
+        if(event.deltaY == 100){
+          gsap.to(globeRef.current.scale, { 
+            x: newScale, 
+            y: newScale, 
+            z: newScale, 
+            duration: 0.5
+          })
+          setMarker((prev) => ({ ...prev, position: newPosition.toArray() }));
+        } else {
+          gsap.to(globeRef.current.scale, { 
+            x: newScale, 
+            y: newScale, 
+            z: newScale, 
+            duration: 0.5, 
+            onComplete: () => {
+            setMarker((prev) => ({ ...prev, position: newPosition.toArray() }));
+          }});
+        }
+      } else {
+        gsap.to(globeRef.current.scale, { 
+          x: newScale, 
+          y: newScale, 
+          z: newScale, 
+          duration: 0.5
+        });
+      }
     };
 
     window.addEventListener("wheel", handleScroll);
     return () => window.removeEventListener("wheel", handleScroll);
-  }, [scale]);
+  }, [scale, marker]);
 
   return (
     <>
@@ -63,12 +92,10 @@ const Globe = () => {
         <meshStandardMaterial map={texture} />
       </mesh>
       {marker && (
-        <>
-          <mesh position={marker.position}>
-            <sphereGeometry args={[0.05, 32, 32]} />
-            <meshStandardMaterial color="yellow" />
-          </mesh>
-        </>
+        <mesh position={marker.position}>
+          <sphereGeometry args={[0.05, 32, 32]} />
+          <meshStandardMaterial color="yellow" />
+        </mesh>
       )}
     </>
   );
