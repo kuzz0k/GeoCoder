@@ -1,0 +1,16 @@
+.main {
+  display: flex;
+  justify-content: space-around;
+
+  section {
+    margin-left: 30vw;
+    margin-top: 10vh;
+    width: 250px;
+    color: white;
+    position: relative;
+
+    h1 {
+      text-align: center;
+    }
+  }
+}

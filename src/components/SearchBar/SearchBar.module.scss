@@ -1,0 +1,21 @@
+.bar {
+  display: flex;
+  justify-content: center;
+}
+
+.bar input {
+  margin-top: 3vh;
+  width: 30vw;
+  max-width: 300px;
+  height: 40px;
+  border-radius: 30px;
+  padding-left: 20px;
+  border: solid 3px white;
+  color: white;
+  background: none;
+  z-index: 10;
+}
+
+// .bar input::placeholder {
+//   color: red;
+// }
