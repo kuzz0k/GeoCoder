@@ -1,7 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import Globe from "./Globe";
-import StarsBackground from "./StarsBackground";
+import Globe from "../Globe/Globe";
+import StarsBackground from "../StarsBackground/StarsBackground";
 import cls from './Earth.module.scss'
 import React from 'react'
 
