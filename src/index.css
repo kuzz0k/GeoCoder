@@ -1,9 +1,4 @@
 body {
   margin: 0;
   overflow: hidden;
-
-  -webkit-user-select: none; /* Для Safari */
-  -moz-user-select: none; /* Для Firefox */
-  -ms-user-select: none; /* Для старых версий IE/Edge */
-  user-select: none; /* Стандартное свойство */
 }

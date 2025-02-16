@@ -1,12 +1,14 @@
 import { useRef, useState, useEffect } from "react";
-import { useLoader, useFrame } from "@react-three/fiber";
+import { useLoader, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import gsap from "gsap";
+import { latToPlace } from '../../http/geocodeApi'
 
-const Globe = () => {
+const Globe = ({ setLocation, search }) => {
   const globeRef = useRef();
   const texture = useLoader(THREE.TextureLoader, "/earth.jpg");
   const [scale, setScale] = useState(1);
+  const { camera } = useThree();
   const [marker, setMarker] = useState(null);
   const isDragging = useRef(false);
 
@@ -36,14 +38,74 @@ const Globe = () => {
       lon,
       originalPosition: point.clone()
     });
-    console.log(lat, lon);
+
+    latToPlace(lat, lon)
+    .then(data => {
+      if(data) {
+        setLocation({place: `${data.address.city ? data.address.city : ''} ${data.address.country}`, lat: lat.toFixed(7), lon: lon.toFixed(7)})
+      } else {
+        setLocation({place: null, lat: null, lon: null})
+      }
+    })
   };
+
+  useEffect(() => {
+    if (!search.lat || !search.lon) return;
+
+    const tempLat = parseFloat(search.lat);
+    const tempLon = parseFloat(search.lon);
+    const radius = 2.5; // Радиус сферы
+
+    // Преобразование lat/lon в сферические координаты
+    const phi = (90 - tempLat) * (Math.PI / 180);
+    const theta = (-tempLon) * (Math.PI / 180);
+
+    const x = radius * Math.sin(phi) * Math.cos(theta);
+    const y = radius * Math.cos(phi);
+    const z = radius * Math.sin(phi) * Math.sin(theta);
+
+    const point = new THREE.Vector3(x, y, z); // Позиция маркера
+
+    setMarker({
+      position: point.clone().toArray(),
+      lat: tempLat,
+      lon: tempLon,
+      originalPosition: point,
+    });
+
+    // 🚀 Вычисляем камеру на луче, но выше маркера
+    const cameraDistance = 5; // Насколько далеко камера от центра (больше радиуса!)
+    const cameraPosition = point.clone().normalize().multiplyScalar(cameraDistance);
+
+    // Анимация камеры
+    gsap.to(camera.position, {
+      x: cameraPosition.x,
+      y: cameraPosition.y,
+      z: cameraPosition.z,
+      duration: 1,
+      ease: "power2.out",
+      onUpdate: () => {
+        camera.lookAt(0, 0, 0); // Всегда смотрим на центр сферы
+      },
+    });
+
+    gsap.to(globeRef.current.scale, { 
+      x: 1, 
+      y: 1, 
+      z: 1, 
+      duration: 1
+    });
+
+    setScale(1)
+
+  }, [search]);
+  
 
   useEffect(() => {
     const handleScroll = (event) => {
       let newScale = scale - event.deltaY * 0.005;
       newScale = Math.min(1.5, Math.max(0.5, newScale));
-
+      console.log(scale, newScale)
       setScale(newScale);
 
       if(marker){
