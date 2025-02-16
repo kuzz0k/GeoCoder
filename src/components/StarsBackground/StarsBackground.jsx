@@ -1,33 +1,30 @@
-import { useRef, useState } from "react";
-import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+import { useRef, useState } from "react"
+import { useFrame } from "@react-three/fiber"
 
 const StarsBackground = () => {
-  const starRef = useRef();
-  const [rotation, setRotation] = useState({ y: 0, x: 0 });
+  const starRef = useRef()
+  const [rotation, setRotation] = useState({ y: 0, x: 0 })
 
-  // Параметры сферы
-  const radius = 50;
-  const numStars = 1000;
+  const radius = 50
+  const numStars = 1000
 
-  // Генерация звезд на поверхности сферы
-  const stars = new Float32Array(numStars * 3);
+  const stars = new Float32Array(numStars * 3)
   for (let i = 0; i < numStars; i++) {
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    const x = radius * Math.sin(phi) * Math.cos(theta);
-    const y = radius * Math.sin(phi) * Math.sin(theta);
-    const z = radius * Math.cos(phi);
+    const theta = Math.random() * Math.PI * 2
+    const phi = Math.acos(2 * Math.random() - 1)
+    const x = radius * Math.sin(phi) * Math.cos(theta)
+    const y = radius * Math.sin(phi) * Math.sin(theta)
+    const z = radius * Math.cos(phi)
 
-    stars[i * 3] = x;
-    stars[i * 3 + 1] = y;
-    stars[i * 3 + 2] = z;
+    stars[i * 3] = x
+    stars[i * 3 + 1] = y
+    stars[i * 3 + 2] = z
   }
 
   useFrame(() => {
-    starRef.current.rotation.y = rotation.y * 0.5;
-    starRef.current.rotation.x = rotation.x * 0.5;
-  });
+    starRef.current.rotation.y = rotation.y * 0.5
+    starRef.current.rotation.x = rotation.x * 0.5
+  })
 
   return (
     <points ref={starRef}>
@@ -41,7 +38,7 @@ const StarsBackground = () => {
       </bufferGeometry>
       <pointsMaterial color="white" size={0.01} />
     </points>
-  );
-};
+  )
+}
 
-export default StarsBackground;
+export default StarsBackground

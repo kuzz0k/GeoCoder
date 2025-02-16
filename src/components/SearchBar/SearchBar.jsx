@@ -19,8 +19,8 @@ const SearchBar = ({ setLocation, setSearch }) => {
       }
     }
 
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress)
+    return () => window.removeEventListener("keydown", handleKeyPress)
   }, [inputValue])
   
 

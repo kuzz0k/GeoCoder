@@ -1,16 +1,23 @@
 .main {
-  display: flex;
-  justify-content: space-around;
+  position: absolute;
+  right: 10vw;
 
   section {
-    margin-left: 30vw;
     margin-top: 10vh;
-    width: 250px;
     color: white;
-    position: relative;
 
-    h1 {
+    *:not(.info) {
       text-align: center;
+    }
+
+    @media (min-width: 600px) {
+      h1 {
+        font-size: 6vh;
+      }
+  
+      p {
+        font-size: 3vh;
+      }
     }
   }
 }
