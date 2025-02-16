@@ -101,7 +101,7 @@ const Globe = ({ setLocation, search, scale, setScale }) => {
     const handleScroll = (event) => {
       let newScale = scale - event.deltaY * 0.005
       newScale = Math.min(1.5, Math.max(0.5, newScale))
-      console.log(scale, newScale)
+      
       setScale(newScale)
 
       if(marker){
