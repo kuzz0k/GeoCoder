@@ -6,7 +6,7 @@ import { latToPlace } from '../../http/geocodeApi'
 
 const Globe = ({ setLocation, search, scale, setScale }) => {
   const globeRef = useRef()
-  const texture = useLoader(THREE.TextureLoader, "/earth.jpg")
+  const texture = useLoader(THREE.TextureLoader, "/GeoCoder/earth.jpg")
   const { camera } = useThree()
   const [marker, setMarker] = useState(null)
   const isDragging = useRef(false)
