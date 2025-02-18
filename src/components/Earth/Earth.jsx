@@ -18,7 +18,10 @@ const Earth = ({ setLocation, search, scale, setScale }) => {
         setScale={setScale}
         scale={scale}
         />
-        <OrbitControls enableZoom={false}/>
+        <OrbitControls 
+        enableZoom={false}
+        enablePan={false}
+        />
       </Canvas>
     </div>
   )
