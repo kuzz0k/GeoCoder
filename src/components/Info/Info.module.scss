@@ -6,17 +6,35 @@
     margin-top: 10vh;
     color: white;
 
-    *:not(.info) {
+    .info {
       text-align: center;
     }
 
-    @media (min-width: 600px) {
-      h1 {
-        font-size: 6vh;
-      }
+    h1 {
+      font-size: 6vh;
+    }
   
-      p {
-        font-size: 3vh;
+    p {
+      font-size: 3vh;
+    }
+  }
+}
+
+@media (max-width: 470px) {
+  .main {
+    left: 0;
+    bottom: 0;
+
+    section {
+      margin-top: 0;
+      display: flex;
+      
+      div {
+        margin: 0 0 30px 30px;
+      }
+
+      .api p:nth-child(1) {
+        padding: 15px 0;
       }
     }
   }

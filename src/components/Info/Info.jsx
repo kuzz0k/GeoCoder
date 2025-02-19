@@ -6,7 +6,7 @@ const Info = ({ location, scale }) => {
   const blockRef = useRef(null)
 
   useEffect(() => {
-    if (window.innerWidth > 800) {
+    if (window.innerWidth > 470) {
       let newWidth
       if (scale === 1.5) {
         newWidth = '20vw'
@@ -21,8 +21,6 @@ const Info = ({ location, scale }) => {
         duration: 1.5,
         ease: "power2.out",
       })
-
-
     }
   }, [scale])
 
@@ -30,16 +28,19 @@ const Info = ({ location, scale }) => {
     <div 
     className={cls.main} 
     ref={blockRef}
-    style={{width: '3vw'}}
     >
-      <section className={cls.box}>
-        <h1>Geocoder</h1>
-        <p>Tap anywhere in the globe to find out the coordinates, country and city of the selected point.</p>
-        <p className={cls.info}>
-          {location.place}
-        </p>
-        {location.lat ? (<p className={cls.info}>lat: {location.lat}</p>) : <></>}
-        {location.lon ? (<p className={cls.info}>lon: {location.lon}</p>) : <></>}
+      <section>
+        <div className={cls.info}>
+          <h1>Geocoder</h1>
+          <p>Tap anywhere in the globe to find out the coordinates, country and city of the selected point.</p>
+        </div>
+        <div className={cls.api}>
+          <p>
+            {location.place}
+          </p>
+          {location.lat ? (<p>lat: {location.lat}</p>) : <></>}
+          {location.lon ? (<p>lon: {location.lon}</p>) : <></>}
+        </div>
       </section>
     </div>
   )

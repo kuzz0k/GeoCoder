@@ -98,15 +98,24 @@ const Globe = ({ setLocation, search, scale, setScale }) => {
   
 
   useEffect(() => {
-    const handleScroll = (event) => {
-      let newScale = scale - event.deltaY * 0.005
-      newScale = Math.min(1.5, Math.max(0.5, newScale))
+    const handleScroll = (event) => {      
+      const allowedScales = [0.5, 1, 1.5]
+      
+      let currentIndex = allowedScales.indexOf(scale)
+
+      if (event.deltaY > 0) {
+        currentIndex = Math.max(0, currentIndex - 1)
+      } else if (event.deltaY < 0) {
+        currentIndex = Math.min(allowedScales.length - 1, currentIndex + 1)
+      }
+
+      const newScale = allowedScales[currentIndex]
       
       setScale(newScale)
 
       if(marker){
         const newPosition = marker.originalPosition.clone().multiplyScalar(newScale)
-        if(event.deltaY == 100){
+        if(event.deltaY > 0){
           gsap.to(globeRef.current.scale, { 
             x: newScale, 
             y: newScale, 
