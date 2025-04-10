@@ -4,7 +4,7 @@
 
 ****
 
-[gh-pages](https://kuzz0k.github.io/GeoCoder/)
+[gh-pages](https://kuzz0k.github.io/GeoCoder/) (без API ключа, поиск соответственно работать не будет)
 
 #### Запуск приложения
 
