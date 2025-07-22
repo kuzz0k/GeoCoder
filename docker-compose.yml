@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  geocoder-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/arm64
+    container_name: geocoder-app
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    volumes:
+      # Если нужно сохранить логи
+      - ./logs:/var/log/nginx
+    networks:
+      - geocoder-network
+
+  # Опционально: можно добавить обратный прокси nginx
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: geocoder-nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./proxy.conf:/etc/nginx/nginx.conf:ro
+      # Для SSL сертификатов (если нужно HTTPS)
+      # - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - geocoder-app
+    restart: unless-stopped
+    networks:
+      - geocoder-network
+
+networks:
+  geocoder-network:
+    driver: bridge
